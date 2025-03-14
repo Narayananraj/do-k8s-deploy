@@ -1,20 +1,23 @@
-# Use official Node.js image as a base
+# Use an official base image
 FROM node:14
 
-# Set the working directory in the container
-WORKDIR /usr/src/app
+# Set the working directory inside the container
+WORKDIR /app
 
-# Copy package.json and package-lock.json from the root of the project
+# Copy package.json and package-lock.json (if they exist)
 COPY package*.json ./
 
-# Install the dependencies
+# Install dependencies
 RUN npm install
 
-# Copy the application code from the `src` directory into the container
-COPY src/ ./src/
+# Check if 'src' directory exists before copying it
+RUN if [ -d "src" ]; then cp -r src/ ./src/; else echo "No src directory found"; fi
 
-# Expose port 80 to the outside world
-EXPOSE 80
+# Copy the rest of the application files (if necessary)
+COPY . .
 
-# Command to run the app
+# Expose the port your app will run on
+EXPOSE 3000
+
+# Start the app
 CMD ["npm", "start"]
