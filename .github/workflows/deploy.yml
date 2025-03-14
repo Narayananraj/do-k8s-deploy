@@ -20,13 +20,14 @@ jobs:
         with:
           kubectl-version: 'latest'
 
-      # Set KUBECONFIG for kubectl to interact with the Kubernetes cluster
+      # Set up Kubernetes configuration using KUBECONFIG secret
       - name: Set up Kubernetes configuration
         run: |
+          mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
           kubectl config set-context --current --namespace=default
 
-      # Verify kubectl can connect to the cluster by getting nodes
+      # Validate Kubernetes connection by getting nodes
       - name: Get Kubernetes nodes
         run: kubectl get nodes
 
