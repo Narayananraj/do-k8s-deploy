@@ -23,6 +23,7 @@ jobs:
       # Configure kubectl to use the DO K8s cluster
       - name: Configure kubectl
         run: |
+          mkdir -p $HOME/.kube
           echo "$KUBECONFIG" > $HOME/.kube/config
 
       # Set up Docker Buildx
