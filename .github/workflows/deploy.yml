@@ -48,8 +48,8 @@ jobs:
       # Build and push Docker image to DockerHub
       - name: Build and push Docker image
         run: |
-          docker build -t your_dockerhub_username/your_app_name:latest .
-          docker push your_dockerhub_username/your_app_name:latest
+          docker build -t narayananraj/app:latest .
+          docker push narayananraj/app:latest
 
       # Deploy the application to Kubernetes using kubectl
       - name: Deploy to Kubernetes
