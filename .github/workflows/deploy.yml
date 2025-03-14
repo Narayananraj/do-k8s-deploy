@@ -11,7 +11,7 @@ jobs:
 
     steps:
       # Checkout the code from the repository
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
       # Set up kubectl (Kubernetes command line tool)
@@ -20,16 +20,17 @@ jobs:
         with:
           kubectl-version: 'latest'
 
-      # Set up Kubernetes configuration using KUBECONFIG secret
-      - name: Set up Kubernetes configuration
+      # Configure kubectl to use the DO K8s cluster
+      - name: Configure kubectl
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
           kubectl config set-context --current --namespace=default
 
-      # Validate Kubernetes connection by getting nodes
-      - name: Get Kubernetes nodes
-        run: kubectl get nodes
+      # Debugging step to check the services and their external IP
+      - name: Get Kubernetes services
+        run: |
+          kubectl get svc
 
       # Set up Docker Buildx
       - name: Set up Docker Buildx
@@ -54,11 +55,17 @@ jobs:
       # Build and push Docker image to DockerHub
       - name: Build and push Docker image
         run: |
-          docker build -t narayananraj/app:latest .
-          docker push narayananraj/app:latest
+          docker build -t your_dockerhub_username/your_app_name:latest .
+          docker push your_dockerhub_username/your_app_name:latest
 
       # Deploy the application to Kubernetes using kubectl
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s/deployment.yaml  # Adjust the path to your Kubernetes deployment YAML
           kubectl apply -f k8s/service.yaml     # Adjust the path to your Kubernetes service YAML
+
+      # Wait for the LoadBalancer to get an external IP (optional step for waiting)
+      - name: Wait for LoadBalancer IP
+        run: |
+          kubectl wait --for=condition=ready svc/your-app-service --timeout=600s
+          kubectl get svc your-app-service
