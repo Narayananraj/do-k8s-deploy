@@ -64,8 +64,4 @@ jobs:
           kubectl apply -f k8s/deployment.yaml  # Adjust the path to your Kubernetes deployment YAML
           kubectl apply -f k8s/service.yaml     # Adjust the path to your Kubernetes service YAML
 
-      # Wait for the LoadBalancer to get an external IP (optional step for waiting)
-   #   - name: Wait for LoadBalancer IP
-    #    run: |
-     #     kubectl wait --for=condition=ready svc/your-app-service --timeout=600s
-      #    kubectl get svc my-app
+     
