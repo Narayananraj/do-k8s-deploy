@@ -26,6 +26,10 @@ jobs:
           mkdir -p $HOME/.kube
           echo "$KUBECONFIG" > $HOME/.kube/config
 
+      # Validate kubectl configuration
+      - name: Validate kubectl configuration
+        run: kubectl get nodes
+
       # Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
